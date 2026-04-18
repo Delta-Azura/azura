@@ -82,20 +82,18 @@ install() {
 	else
 		echo $conflict
 		echo $conflict | grep -- "-f"
+        #up=$(pkginfo -d $package)
 		if [[ $? == "0" ]]; then 
 			read -p "Conflict with existing files detecting, do you want to overwrite ? : " answer 
 			if [[ $answer == "y" ]]; then
 				pkgadd -f /var/cache/onyx/$1/$package
 			fi
-            if [[ $? != "0" ]];then
-                read -p "The package is already installed, do you want to upgrade ? : " reponse
-                if [[ $reponse == "y" ]]; then
-                pkgadd -u /var/cache/onyx/$1/$package
-            fi 
+        else 
+            read -p "The package is already installed, do you want to upgrade ? : " reponse
+            if [[ $reponse == "y" ]]; then
+            pkgadd -u /var/cache/onyx/$1/$package
+        fi 
     fi 
-
-		fi
-	fi
 }
 
 
