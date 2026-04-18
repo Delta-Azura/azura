@@ -1,5 +1,14 @@
 #! /bin/bash
 
+
+main() {
+	if [[ $1 == "install" ]]; then 
+		install $2 
+	fi
+	echo "tamère" 
+}
+#main "$@"
+ 
 init() {
     cd /var/cache/
     ls onyx
@@ -17,10 +26,11 @@ init() {
 
 }
 
-install() {
-    init() 
+build() {
+	echo $?
+    init 
     package="$1"
-    cd onyx/$package
+    cd /var/cache/onyx/$package
     source Pkgfile
     for i in $makedepends; do 
         pkginfo -d $i 
@@ -55,3 +65,15 @@ install() {
         echo "Build succeded, use pkgadd or pkgadd -u to install or update $package" 
     fi
 }
+
+install() {
+    package=$(ls /var/cache/onyx/$1 | grep cards)
+    pkgadd $package
+    read -p "The package is already installed, do you want to upgrade ? : " reponse
+    if [[ $reponse == "y" ]]; then
+        pkgadd -u $package
+    fi
+}
+
+
+main "$@"
