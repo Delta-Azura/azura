@@ -11,10 +11,13 @@ main() {
     if [[ $1 == "help" ]];then 
         echo "hello world"
     fi
-    
-	#echo "tamère" 
+    if [[ $1 == "update" ]];then 
+        echo "UPDATING"
+        update
+    fi 
+	
 }
-#main "$@"
+
  
 init() {
     cd /var/cache/
