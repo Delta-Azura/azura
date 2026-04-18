@@ -9,13 +9,16 @@ main() {
 		build $2
 	fi
     if [[ $1 == "help" ]];then 
-        echo "hello world"
+        echo "Azura is still being built, please be careful"
     fi
     if [[ $1 == "update" ]];then 
         echo "UPDATING"
-        upgrade
-    fi 
-	
+        update $2
+    fi
+    if [[ $1 == "upgrade" ]]; then 
+        upgrade 
+    fi
+    echo "Thanks for using Azura on Onyx, please report any feedback"
 }
 
  
