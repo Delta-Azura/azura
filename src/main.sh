@@ -1,4 +1,4 @@
-
+#! /bin/bash
 
 
 
@@ -12,9 +12,25 @@ base() {
 
 }
 
+init() {
+    cd /var/cache/
+    ls onyx
+    if [[ $? != 0 ]]; then 
+        git clone https://github.com/Delta-Azura/onyx.git
+    else 
+        cd onyx 
+        git fetch origin 
+        BEHIND=$(git rev-list HEAD..origin/main --count)
+        if [[ $BEHIND -gt 0 ]]; then
+            echo "$BEHIND commit(s) en retard"
+            git pull
+        fi
+    fi
+
+}
 
 install() {
-    git clone https://github.com/Delta-Azura/onyx.git
+    init() 
     local package="$1"
     cd onyx/$package
     source Pkgfile
@@ -27,9 +43,7 @@ install() {
                 echo "The dependencies aren't in the repo"
                 exit
             else
-                pushd $depends1
-                fakeroot pkgmk -d
-                popd  
+                install "$i"
             fi
         fi
     done 
@@ -43,9 +57,7 @@ install() {
                 echo "The dependencies aren't in the repo"
                 exit
             else 
-                pushd $makedepends1
-                fakeroot pkgmk -d
-                popd 
+                install "$i"
             fi 
         fi
     done
