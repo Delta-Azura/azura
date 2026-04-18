@@ -87,13 +87,15 @@ install() {
 			if [[ $answer == "y" ]]; then
 				pkgadd -f /var/cache/onyx/$1/$package
 			fi
+            if [[ $? != "0" ]];then
+                read -p "The package is already installed, do you want to upgrade ? : " reponse
+                if [[ $reponse == "y" ]]; then
+                pkgadd -u /var/cache/onyx/$1/$package
+            fi 
+    fi 
+
 		fi
 	fi
-		
-    read -p "The package is already installed, do you want to upgrade ? : " reponse
-    if [[ $reponse == "y" ]]; then
-        pkgadd -u /var/cache/onyx/$1/$package
-    fi
 }
 
 
