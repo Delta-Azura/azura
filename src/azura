@@ -8,6 +8,10 @@ main() {
 	if [[ $1 == "build" ]];then
 		build $2
 	fi
+    if [[ $1 == "help" ]];then 
+        echo "hello world"
+    fi
+    
 	#echo "tamère" 
 }
 #main "$@"
