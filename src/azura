@@ -92,6 +92,7 @@ install() {
             read -p "The package is already installed, do you want to upgrade ? : " reponse
             if [[ $reponse == "y" ]]; then
             pkgadd -u /var/cache/onyx/$1/$package
+            fi
         fi 
     fi 
 }
