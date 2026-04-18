@@ -19,7 +19,7 @@ init() {
 
 install() {
     init() 
-    local package="$1"
+    package="$1"
     cd onyx/$package
     source Pkgfile
     for i in $makedepends; do 
