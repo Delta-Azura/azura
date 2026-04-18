@@ -101,5 +101,23 @@ install() {
     fi 
 }
 
+update() {
+    init
+    namepkg=$(ls /var/lib/pkg/DB/)
+    for i in $namepkg; do
+        check=$(pkginfo -d $i)
+        verify=$(echo $check | grep Version | awk '{print $3}')
+        collection=$(echo $check | grep Collection | awk '{print $3}')
+        pushd /var/cache/onyx/$collection/$i
+        source Pkgfile
+        popd
+        if [[ $version == $verify ]]; then 
+            echo "$i is up to date";
+        else
+            build $i
+        fi
+    done 
+}
+
 
 main "$@"
