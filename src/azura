@@ -59,12 +59,12 @@ build() {
         pkginfo -d $i 
         if [[ $? != 0 ]]; then
             echo "Makedepends aren't installed"
-            depends1=$(find ../../* -name"$i" -type d)
+            depends1=$(find ../../* -name "$i" -type d)
             if [[ $? != 0 ]]; then 
                 echo "The dependencies aren't in the repo"
                 exit
             else
-                install "$i"
+                build "$i"
             fi
         fi
     done 
@@ -126,15 +126,20 @@ update() {
     source Pkgfile
     popd
     if [[ $version == $verify ]]; then 
-            echo "$1 is up to date"
+        echo "$1 is up to date"
     else
-            build $1
+    ##### MOVE THIS TO THE BUILD FUNCTION AND CHECK CONFIGURATION FUNCTION 
+        if [[ $namepkg == "kernel" ]]; then
+            cp /etc/azura.d/kernel/config /var/cache/onyx/core/kernel/
+        fi
+        build $1
     fi
 }
 
 
 upgrade() {
     init
+    configuration
     namepkg=$(ls /var/lib/pkg/DB/)
     for i in $namepkg; do
         check=$(pkginfo -d $i)
@@ -146,8 +151,10 @@ upgrade() {
         if [[ $version == $verify ]]; then 
             echo "$i is up to date"
         else
+##### MOVE THIS TO THE BUILD FUNCTION AND CHECK CONFIGURATION FUNCTION 
+
             if [[ $namepkg == "kernel" ]]; then 
-                mv /etc/azura.d/kernel/config /var/cache/onyx/kernel/config
+                cp /etc/azura.d/kernel/config /var/cache/onyx/kernel/config
             fi 
             build $i
         fi

@@ -1,0 +1,6 @@
+if -d pour vérifier la présence d'un dossier
+if -f pour vérifier que fakeroot est dans /usr/bin/fakeroot
+if -x pour vérifier s'il est éxécutable à vérifier
+
+vérifier que git est installé
+
