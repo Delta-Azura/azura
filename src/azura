@@ -1,17 +1,5 @@
 #! /bin/bash
 
-
-
-
-base() {
-    cd ~/
-    git clone https://github.com/Delta-Azura/onyx.git
-    cd onyx
-    cd core 
-    
-
-}
-
 init() {
     cd /var/cache/
     ls onyx
@@ -38,7 +26,7 @@ install() {
         pkginfo -d $i 
         if [[ $? != 0 ]]; then
             echo "Makedepends aren't installed"
-            depends1=$(find -name ../../* "$i" -type d)
+            depends1=$(find ../../* -name"$i" -type d)
             if [[ $? != 0 ]]; then 
                 echo "The dependencies aren't in the repo"
                 exit
@@ -52,7 +40,7 @@ install() {
         pkginfo -d $i  
         if [[ $? != 0 ]]; then 
             echo "Dependencies aren't satisfied"
-            makedepends1=$(find -name ../../* "$i" -type d) 
+            makedepends1=$(find ../../* -name "$i" -type d) 
             if [[ $? != 0 ]]; then 
                 echo "The dependencies aren't in the repo"
                 exit
