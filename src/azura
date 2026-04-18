@@ -140,6 +140,7 @@ update() {
 upgrade() {
     init
     configuration
+##### ADD CUT TO REMOVE THE VERSION AND EXTENSION, ls -1 
     namepkg=$(ls /var/lib/pkg/DB/)
     for i in $namepkg; do
         check=$(pkginfo -d $i)
