@@ -5,7 +5,10 @@ main() {
 	if [[ $1 == "install" ]]; then 
 		install $2 
 	fi
-	echo "tamère" 
+	if [[ $1 == "build" ]];then
+		build $2
+	fi
+	#echo "tamère" 
 }
 #main "$@"
  
@@ -23,6 +26,11 @@ init() {
             git pull
         fi
     fi
+	ls /usr/bin/fakeroot
+	if [[ $? != 0 ]];then 
+		echo "Fakeroot needs to be installed"
+		exit
+	fi
 
 }
 
@@ -68,10 +76,23 @@ build() {
 
 install() {
     package=$(ls /var/cache/onyx/$1 | grep cards)
-    pkgadd $package
+    conflict=$(pkgadd /var/cache/onyx/$1/$package 2>&1)
+	if [[ $? == 0 ]];then 
+		echo "SUCCESS"
+	else
+		echo $conflict
+		echo $conflict | grep -- "-f"
+		if [[ $? == "0" ]]; then 
+			read -p "Conflict with existing files detecting, do you want to overwrite ? : " answer 
+			if [[ $answer == "y" ]]; then
+				pkgadd -f /var/cache/onyx/$1/$package
+			fi
+		fi
+	fi
+		
     read -p "The package is already installed, do you want to upgrade ? : " reponse
     if [[ $reponse == "y" ]]; then
-        pkgadd -u $package
+        pkgadd -u /var/cache/onyx/$1/$package
     fi
 }
 
