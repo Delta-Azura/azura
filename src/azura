@@ -19,7 +19,7 @@ main() {
         update $2
     fi
     if [[ $1 == "upgrade" ]]; then 
-        upgrade 
+        upgrade
     fi
     echo "Thanks for using Azura on Onyx, please report any feedback"
 }
@@ -55,44 +55,10 @@ sync() {
 build() { 
     package="$1"
     cd /var/cache/onyx/$package
-    source Pkgfile
-    for i in $makedepends; do 
-        pkginfo -d $i 
-        if [[ $? != 0 ]]; then
-            echo "Makedepends aren't installed"
-            depends1=$(find ../../* -name "$i" -type d)
-            if [[ $? != 0 ]]; then 
-                echo "The dependencies aren't in the repo"
-                exit
-            else
-                if [[ $namepkg == "kernel" ]]; then
-                    if [[ $CONFIG_KERNEL == "y" ]]; then
-                        cp /etc/azura.d/kernel/config /var/cache/onyx/kernel/config
-                    fi 
-                fi 
-                build "$i"
-            fi
-        fi
-    done 
-
-    for i in $depends; do 
-        pkginfo -d $i  
-        if [[ $? != 0 ]]; then 
-            echo "Dependencies aren't satisfied"
-            makedepends1=$(find ../../* -name "$i" -type d) 
-            if [[ $? != 0 ]]; then 
-                echo "The dependencies aren't in the repo"
-                exit
-            else 
-                install "$i"
-            fi 
-        fi
-    done
-
-    fakeroot pkgmk -d 
-    if [[ $? == "0" ]]; then 
-        echo "Build succeded, use pkgadd or pkgadd -u to install or update $package" 
-    fi
+	cat Pkgfile
+	pwd
+	echo "DEBUG package=[$package]"
+	fakeroot pkgmk -d 2>&1
 }
 
 install() {
@@ -148,16 +114,17 @@ upgrade() {
     configuration
     namepkg=$(ls /var/lib/pkg/DB/)
     for i in $namepkg; do
-        check=$(pkginfo -d $i)
-        verify=$(echo $check | grep Version | awk '{print $3}')
-        collection=$(echo $check | grep Collection | awk '{print $3}')
-        pushd /var/cache/onyx/$collection/$i
-        source Pkgfile
-        popd
+        verify=$(pkginfo -d $i | awk '/^Version/{print $3}')
+        collection=$(pkginfo -d $i | awk '/^Collection/{print $3}')
+        echo $collection
+	echo $verify
+	version=$(source /var/cache/onyx/$collection/$i/Pkgfile && echo $version)
         if [[ $version == $verify ]]; then 
             echo "$i is up to date"
         else
-            build $i
+            build $collection/$i
+		
+		install $collection/$i
         fi
     done 
 }
