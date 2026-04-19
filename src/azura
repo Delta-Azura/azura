@@ -64,6 +64,11 @@ build() {
                 echo "The dependencies aren't in the repo"
                 exit
             else
+                if [[ $namepkg == "kernel" ]]; then
+                    if [[ $CONFIG_KERNEL == "y" ]]; then
+                        cp /etc/azura.d/kernel/config /var/cache/onyx/kernel/config
+                    fi 
+                fi 
                 build "$i"
             fi
         fi
@@ -140,7 +145,6 @@ update() {
 upgrade() {
     init
     configuration
-##### ADD CUT TO REMOVE THE VERSION AND EXTENSION, ls -1 
     namepkg=$(ls /var/lib/pkg/DB/)
     for i in $namepkg; do
         check=$(pkginfo -d $i)
@@ -152,11 +156,6 @@ upgrade() {
         if [[ $version == $verify ]]; then 
             echo "$i is up to date"
         else
-##### MOVE THIS TO THE BUILD FUNCTION AND CHECK CONFIGURATION FUNCTION 
-
-            if [[ $namepkg == "kernel" ]]; then 
-                cp /etc/azura.d/kernel/config /var/cache/onyx/kernel/config
-            fi 
             build $i
         fi
     done 
