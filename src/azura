@@ -5,11 +5,14 @@ main() {
 	if [[ $1 == "install" ]]; then
 		install $2 
 	fi
+    if [[ $1 == "sync" ]]; then
+        sync
+    fi 
 	if [[ $1 == "build" ]];then
 		build $2
 	fi
     if [[ $1 == "help" ]];then 
-        echo "Azura is still being built, please be careful"
+        echo "Please run azura sync before using other functions"
     fi
     if [[ $1 == "update" ]];then 
         echo "UPDATING"
@@ -22,7 +25,7 @@ main() {
 }
 
  
-init() {
+sync() {
     cd /var/cache/
     ls onyx
     if [[ $? != 0 ]]; then 
@@ -49,9 +52,7 @@ init() {
 
 }
 
-build() {
-	echo $?
-    init 
+build() { 
     package="$1"
     cd /var/cache/onyx/$package
     source Pkgfile
