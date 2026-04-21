@@ -151,7 +151,7 @@ bootstrap() {
     chmod 755 $LFS
     mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
     for i in bin lib sbin; do
-        ln -sv $LFS/usr/$i $LFS/$i
+        ln -sv usr/$i $LFS/$i
     done
 
     case $(uname -m) in
@@ -207,12 +207,12 @@ EOF
     mkdir -pv $LFS/var/{cache,local,log,mail,opt,spool}
     mkdir -pv $LFS/var/lib/{color,misc,locate}
 ##### correct the symbolic links
-    ln -sfv $LFS/run $LFS/var/run
-    ln -sfv $LFS/run/lock $LFS/var/lock
+    ln -sfv ../run $LFS/var/run
+    ln -sfv ../run/lock $LFS/var/lock
 
     install -dv -m 0750 $LFS/root
     install -dv -m 1777 $LFS/tmp $LFS/var/tmp
-    ln -sv $LFS/proc/self/mounts $LFS/etc/mtab
+    ln -sv /proc/self/mounts $LFS/etc/mtab
     cat > $LFS/etc/hosts << EOF
     127.0.0.1  localhost $(hostname)
     ::1        localhost
@@ -336,7 +336,7 @@ EOF
     [Service]
     TTYVTDisallocate=no
 EOF
-    ln -sfv $LFS/dev/null $LFS/etc/systemd/system/tmp.mount
+    ln -sfv /dev/null $LFS/etc/systemd/system/tmp.mount
     mkdir -pv $LFS/etc/systemd/coredump.conf.d
     cat > $LFS/etc/systemd/coredump.conf.d/maxuse.conf << EOF
     [Coredump]
