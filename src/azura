@@ -1,6 +1,5 @@
 #! /bin/bash
 
-
 main() {
 	if [[ $1 == "install" ]]; then
 		install $2 
@@ -138,13 +137,16 @@ bootstrap() {
     wget https://github.com/NuTyX/cards/archive/refs/tags/3.2.3.tar.gz
     tar -xf 3.2.3.tar.gz
     cd cards-3.2.3
+	sed -i 's/-Werror//' Makefile.inc
+	sed -i 's/ -static//' Makefile.inc
     make all
     make install
     export LFS=/mnt/lfs
     umask 022
     mkdir -pv $LFS
     read -p "Enter the partition name you want to install onyx on : " partition 
-    mount -v -t ext4 /dev/$partition $LFS
+	mkfs.ext4 /dev/$partition
+    mount -v -t ext4 /dev/$partition $LFS 
     chown root:root $LFS
     chmod 755 $LFS
     mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
@@ -274,8 +276,9 @@ EOF
     tar -xf core-backup.backup
     cd core-backup
     pkgname=$(ls)
-    for i in $pkgname; do
-        pkgadd -r $LFS $i
+    mkdir -p /mnt/lfs/var/lib/pkg/DB/
+	for i in $pkgname; do
+        pkgadd -f -r $LFS $i
     done
     cat > $LFS/etc/inputrc << "EOF"
     # Begin /etc/inputrc
