@@ -21,6 +21,9 @@ main() {
     if [[ $1 == "upgrade" ]]; then 
         upgrade
     fi
+    if [[ $1 == "bootstrap" ]]; then 
+        bootstrap
+    fi
     echo "Thanks for using Azura on Onyx, please report any feedback"
 }
 
@@ -146,7 +149,7 @@ bootstrap() {
     chmod 755 $LFS
     mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
     for i in bin lib sbin; do
-        ln -sv usr/$i $LFS/$i
+        ln -sv $LFS/usr/$i $LFS/$i
     done
 
     case $(uname -m) in
@@ -160,9 +163,9 @@ bootstrap() {
         x86_64) chown -v lfs $LFS/lib64 ;;
     esac
     cat > /home/lfs/.bash_profile << "EOF"
-        exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
-    EOF
-    cat > ~/.bashrc << "EOF"
+    exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
+EOF
+    cat > /home/lfs/.bashrc << "EOF"
     set +h
     umask 022
     LFS=/mnt/lfs
@@ -173,10 +176,10 @@ bootstrap() {
     PATH=$LFS/tools/bin:$PATH
     CONFIG_SITE=$LFS/usr/share/config.site
     export LFS LC_ALL LFS_TGT PATH CONFIG_SITE
-    EOF
+EOF
     cat >> ~/.bashrc << "EOF"
-        export MAKEFLAGS=-j$(nproc)
-    EOF
+    export MAKEFLAGS=-j$(nproc)
+EOF
     wget https://cloud.g-os.org/public.php/dav/files/TBoBjMDXFpwcQ3R/core-backup.backup
     mkdir -pv $LFS/{dev,proc,sys,run}
     mount -v --bind /dev $LFS/dev
@@ -211,7 +214,7 @@ bootstrap() {
     cat > $LFS/etc/hosts << EOF
     127.0.0.1  localhost $(hostname)
     ::1        localhost
-    EOF
+EOF
     cat > $LFS/etc/passwd << "EOF"
     root:x:0:0:root:/root:/bin/bash
     bin:x:1:1:bin:/dev/null:/usr/bin/false
@@ -227,7 +230,7 @@ bootstrap() {
     uuidd:x:80:80:UUID Generation Daemon User:/dev/null:/usr/bin/false
     systemd-oom:x:81:81:systemd Out Of Memory Daemon:/:/usr/bin/false
     nobody:x:65534:65534:Unprivileged User:/dev/null:/usr/bin/false
-    EOF
+EOF
     cat > $LFS/etc/group << "EOF"
     root:x:0:
     bin:x:1:daemon
@@ -263,7 +266,7 @@ bootstrap() {
     wheel:x:97:
     users:x:999:
     nogroup:x:65534:
-    EOF
+EOF
     touch $LFS/var/log/{btmp,lastlog,faillog,wtmp}
     chgrp -v utmp $LFS/var/log/lastlog
     chmod -v 664  $LFS/var/log/lastlog
@@ -316,7 +319,7 @@ bootstrap() {
     "\e[F": end-of-line
 
     # End /etc/inputrc
-    EOF
+EOF
     cat > $LFS/etc/shells << "EOF"
     # Begin /etc/shells
 
@@ -324,18 +327,18 @@ bootstrap() {
     /bin/bash
 
     # End /etc/shells
-    EOF
+EOF
     mkdir -pv $LFS/etc/systemd/system/getty@tty1.service.d
     cat > $LFS/etc/systemd/system/getty@tty1.service.d/noclear.conf << EOF
     [Service]
     TTYVTDisallocate=no
-    EOF
+EOF
     ln -sfv $LFS/dev/null $LFS/etc/systemd/system/tmp.mount
     mkdir -pv $LFS/etc/systemd/coredump.conf.d
     cat > $LFS/etc/systemd/coredump.conf.d/maxuse.conf << EOF
     [Coredump]
     MaxUse=5G
-    EOF
+EOF
     cat > $LFS/etc/fstab << "EOF"
     # Begin /etc/fstab
 
@@ -346,14 +349,14 @@ bootstrap() {
     /dev/<yyy>     swap         swap     pri=1               0     0
 
     # End /etc/fstab
-    EOF
+EOF
     echo 13.0-systemd > $LFS/etc/lfs-release
     cat > $LFS/etc/lsb-release << "EOF"
     DISTRIB_ID="Linux From Scratch"
     DISTRIB_RELEASE="13.0-systemd"
     DISTRIB_CODENAME="<your name here>"
     DISTRIB_DESCRIPTION="Linux From Scratch"
-    EOF
+EOF
     cat > $LFS/etc/os-release << "EOF"
     NAME="Linux From Scratch"
     VERSION="13.0-systemd"
@@ -362,7 +365,7 @@ bootstrap() {
     VERSION_CODENAME="<your name here>"
     HOME_URL="https://www.linuxfromscratch.org/lfs/"
     RELEASE_TYPE="stable"
-    EOF
+EOF
     umount -R $LFS
     echo "The installation succeded, please run grub to add your new system to the boot entries."
     echo "You must also modify your /etc/fstab"
