@@ -366,6 +366,7 @@ bootstrap() {
     umount -R $LFS
     echo "The installation succeded, please run grub to add your new system to the boot entries."
     echo "You must also modify your /etc/fstab"
+    echo "Please consider recompiling the kernel according to your needs as it might not boot"
 }
 
 configuration() {
