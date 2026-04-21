@@ -389,7 +389,7 @@ bootstrap() {
     mkdir -pv $LFS
     read -p "Enter the partition name you want to install onyx on : " partition 
 	mkfs.ext4 $partition
-    mount -v -t ext4 /dev$partition $LFS 
+    mount -v -t ext4 $partition $LFS 
     chown root:root $LFS
     chmod 755 $LFS
     mkdir -pv $LFS/{etc,var} $LFS/usr/{bin,lib,sbin}
