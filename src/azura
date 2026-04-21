@@ -115,16 +115,17 @@ upgrade() {
     namepkg=$(ls /var/lib/pkg/DB/)
     for i in $namepkg; do
         verify=$(pkginfo -d $i | awk '/^Version/{print $3}')
-        collection=$(pkginfo -d $i | awk '/^Collection/{print $3}')
-        echo $collection
+        #collection=$(pkginfo -d $i | awk '/^Collection/{print $3}')
+        collection=$(find /var/cache/onyx/ -name $i -type d)
+        pathpkg=(cat $collection/Pkgfile | cut -d 3)
 	echo $verify
-	version=$(source /var/cache/onyx/$collection/$i/Pkgfile && echo $version)
+	version=$(source /var/cache/onyx/$pathpkg/$i/Pkgfile && echo $version)
         if [[ $version == $verify ]]; then 
             echo "$i is up to date"
         else
-            build $collection/$i
+            build $pathpkg/$i
 		
-		install $collection/$i
+		install $pathpkg/$i
         fi
     done 
 }
