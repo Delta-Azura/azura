@@ -622,7 +622,8 @@ EOF
     echo "Please consider recompiling the kernel according to your needs as it might not boot"
     ln -sv /usr/lib/ld-linux-x86-64.so.2 $LFS/lib64/ld-linux-x86-64.so.2
     echo "Consider entering in the chroot and running : systemd-machine-id-setup && systemctl preset-all"
-    echo "Also do not forget to create a password for root"
+    echo "Also do not forget to create a password for root, you will need to configure shadow for that"
+    echo "Here are the commands you will need to enter : pwconv && grpconv mkdir -p /etc/default && useradd -D --gid 999 && passwd root"
 	umount -R /mnt
 }
 
