@@ -384,7 +384,7 @@ bootstrap() {
 	sed -i 's/ -static//' Makefile.inc
     make all
     make install
-    export LFS=/mnt/lfs
+    export LFS=/mnt
     umask 022
     mkdir -pv $LFS
     read -p "Enter the partition name you want to install onyx on : " partition 
@@ -518,10 +518,11 @@ EOF
     chgrp -v utmp $LFS/var/log/lastlog
     chmod -v 664  $LFS/var/log/lastlog
     chmod -v 600  $LFS/var/log/btmp
-    tar -xf core-backup.tar.gz 
-    cd core-backup
+	mkdir my_packages
+	cd my_packages
+    tar -xf ../core-backup.tar.gz
     pkgname=$(ls)
-    mkdir -p /mnt/lfs/var/lib/pkg/DB/
+    mkdir -p /mnt/var/lib/pkg/DB/
 	for i in $pkgname; do
         pkgadd -f -r $LFS $i
     done
@@ -615,13 +616,14 @@ HOME_URL="https://www.linuxfromscratch.org/lfs/"
 RELEASE_TYPE="stable"
 EOF
 
-    umount -R $LFS
+    
     echo "The installation succeded, please run grub to add your new system to the boot entries."
     echo "You must also modify your /etc/fstab"
     echo "Please consider recompiling the kernel according to your needs as it might not boot"
     ln -sv /usr/lib/ld-linux-x86-64.so.2 $LFS/lib64/ld-linux-x86-64.so.2
     echo "Consider entering in the chroot and running : systemd-machine-id-setup && systemctl preset-all"
     echo "Also do not forget to create a password for root"
+	umount -R /mnt
 }
 
 configuration() {
