@@ -388,7 +388,7 @@ bootstrap() {
     umask 022
     mkdir -pv $LFS
     read -p "Enter the partition name you want to install onyx on : " partition 
-	mkfs.ext4 /dev/$partition
+	mkfs.ext4 $partition
     mount -v -t ext4 /dev$partition $LFS 
     chown root:root $LFS
     chmod 755 $LFS
