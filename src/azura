@@ -455,8 +455,8 @@ EOF
     ln -sfv ../run $LFS/var/run
     ln -sfv ../run/lock $LFS/var/lock
 
-    install -dv -m 0750 $LFS/root
-    install -dv -m 1777 $LFS/tmp $LFS/var/tmp
+    settinguproot=$(install -dv -m 0750 $LFS/root)
+    settinguptpm=$(install -dv -m 1777 $LFS/tmp $LFS/var/tmp)
     ln -sv /proc/self/mounts $LFS/etc/mtab
     cat > $LFS/etc/hosts << EOF
     127.0.0.1  localhost $(hostname)
