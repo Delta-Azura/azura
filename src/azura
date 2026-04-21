@@ -54,7 +54,7 @@ sync() {
 
 build() { 
     package="$1"
-    cd /var/cache/onyx/$package
+    cd $package
 	cat Pkgfile
 	pwd
 	echo "DEBUG package=[$package]"
@@ -62,8 +62,8 @@ build() {
 }
 
 install() {
-    package=$(ls /var/cache/onyx/$1 | grep cards)
-    conflict=$(pkgadd /var/cache/onyx/$1/$package 2>&1)
+    package=$(ls $1/*cards*)
+    conflict=$(pkgadd $package 2>&1)
 	if [[ $? == 0 ]]; then 
 		echo "SUCCESS"
 	else
@@ -73,12 +73,12 @@ install() {
 		if [[ $? == "0" ]]; then 
 			read -p "Conflict with existing files detecting, do you want to overwrite ? : " answer 
 			if [[ $answer == "y" ]]; then
-				pkgadd -f /var/cache/onyx/$1/$package
+				pkgadd -f /var/cache/onyx/$package
 			fi
         else 
             read -p "The package is already installed, do you want to upgrade ? : " reponse
             if [[ $reponse == "y" ]]; then
-            pkgadd -u /var/cache/onyx/$1/$package
+            pkgadd -u /var/cache/onyx/$package
             fi
         fi 
     fi 
@@ -116,16 +116,16 @@ upgrade() {
     for i in $namepkg; do
         verify=$(pkginfo -d $i | awk '/^Version/{print $3}')
         #collection=$(pkginfo -d $i | awk '/^Collection/{print $3}')
-        collection=$(find /var/cache/onyx/ -name $i -type d)
-        pathpkg=(cat $collection/Pkgfile | cut -d 3)
-	echo $verify
-	version=$(source /var/cache/onyx/$pathpkg/$i/Pkgfile && echo $version)
+        pathpkg=$(find /var/cache/onyx/ -name $i -type d)
+        #pathpkg=$(cat $collection)
+	echo $verify && echo $pathpkg
+	version=$(source $pathpkg/Pkgfile && echo $version)
         if [[ $version == $verify ]]; then 
             echo "$i is up to date"
         else
-            build $pathpkg/$i
+            build $pathpkg
 		
-		install $pathpkg/$i
+		install $pathpkg
         fi
     done 
 }
