@@ -425,7 +425,9 @@ EOF
     cat >> ~/.bashrc << "EOF"
 export MAKEFLAGS=-j$(nproc)
 EOF
-    wget https://cloud.g-os.org/public.php/dav/files/TBoBjMDXFpwcQ3R/core-backup.backup
+    #wget https://cloud.g-os.org/public.php/dav/files/TBoBjMDXFpwcQ3R/core-backup.backup
+    #wget https://cloud.g-os.org/public.php/dav/files/TBoBjMDXFpwcQ3R/core-backup.tar.gz
+    wget https://cloud.g-os.org/public.php/dav/files/TBoBjMDXFpwcQ3R/core-backup.tar.gz
     mkdir -pv $LFS/{dev,proc,sys,run}
     mount -v --bind /dev $LFS/dev
     mount -vt devpts devpts -o gid=5,mode=0620 $LFS/dev/pts
@@ -612,10 +614,14 @@ VERSION_CODENAME="<your name here>"
 HOME_URL="https://www.linuxfromscratch.org/lfs/"
 RELEASE_TYPE="stable"
 EOF
+
     umount -R $LFS
     echo "The installation succeded, please run grub to add your new system to the boot entries."
     echo "You must also modify your /etc/fstab"
     echo "Please consider recompiling the kernel according to your needs as it might not boot"
+    #ln -sv /usr/lib/ld-linux-x86-64.so.2 $LFS/lib64/ld-linux-x86-64.so.2
+    echo "Consider entering in the chroot and running : systemd-machine-id-setup && systemctl preset-all"
+    echo "Also, you will need to follow the pam post configuration and shadow compilation to create a password for root"
 }
 
 configuration() {
