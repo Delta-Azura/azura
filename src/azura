@@ -137,7 +137,7 @@ upgrade() {
 bootstrap() {
     wget https://github.com/NuTyX/cards/archive/refs/tags/3.2.3.tar.gz
     tar -xf 3.2.3.tar.gz
-    cd 3.2.3
+    cd cards-3.2.3
     make all
     make install
     export LFS=/mnt/lfs
