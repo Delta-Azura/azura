@@ -519,9 +519,8 @@ EOF
     chgrp -v utmp $LFS/var/log/lastlog
     chmod -v 664  $LFS/var/log/lastlog
     chmod -v 600  $LFS/var/log/btmp
-	mkdir my_packages
-	cd my_packages
-    tar -xf ../core-backup.tar.gz
+    tar -xf ../archive.tar.gz
+    cd my_packages
     pkgname=$(ls)
     mkdir -p /mnt/var/lib/pkg/DB/
 	for i in $pkgname; do
@@ -631,7 +630,7 @@ EOF
 done
 EOF
     chmod u+x $LFS/tmp/script.sh
-    chroot /mnt/lfs /bin/bash -c "/tmp/script.sh"
+    chroot /mnt /bin/bash -c "/tmp/script.sh"
     echo "The installation succeded, please run grub to add your new system to the boot entries."
     echo "You must also modify your /etc/fstab"
     echo "Please consider recompiling the kernel according to your needs as it might not boot"
