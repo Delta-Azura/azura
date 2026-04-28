@@ -622,6 +622,7 @@ EOF
     cat > $LFS/tmp/script.sh << "EOF"
  systemd-machine-id-setup && systemctl preset-all
  pwconv && grpconv mkdir -p /etc/default && useradd -D --gid 999 && passwd root
+ cd /tmp/my_packages
  pkg=$(ls)
  for i in $pkg; do
     pkgadd $i
