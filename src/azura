@@ -377,13 +377,13 @@ EOF
 
 
 bootstrap() {
-    wget https://github.com/NuTyX/cards/archive/refs/tags/3.2.3.tar.gz
-    tar -xf 3.2.3.tar.gz
-    cd cards-3.2.3
-	sed -i 's/-Werror//' Makefile.inc
-	sed -i 's/ -static//' Makefile.inc
-    make all
-    make install
+    #wget https://github.com/NuTyX/cards/archive/refs/tags/3.2.3.tar.gz
+    #tar -xf 3.2.3.tar.gz
+    #cd cards-3.2.3
+	#sed -i 's/-Werror//' Makefile.inc
+	#sed -i 's/ -static//' Makefile.inc
+    #make all
+    #make install
     export LFS=/mnt
     umask 022
     mkdir -pv $LFS
