@@ -273,8 +273,8 @@ EOF
     chgrp -v utmp $LFS/var/log/lastlog
     chmod -v 664  $LFS/var/log/lastlog
     chmod -v 600  $LFS/var/log/btmp
-    tar -xf core-backup.backup
-    cd core-backup
+    tar -xf binaries.tar.gz
+    cd my_packages
     pkgname=$(ls)
     mkdir -p /mnt/lfs/var/lib/pkg/DB/
 	for i in $pkgname; do
@@ -526,6 +526,9 @@ EOF
 	for i in $pkgname; do
         pkgadd -f -r $LFS $i
     done
+    cp pkgadd /mnt/usr/bin/
+    mkdir $LFS/tmp/
+    cp -r my_packages $LFS/tmp
     cat > $LFS/etc/inputrc << "EOF"
 # Begin /etc/inputrc
 # Modified by Chris Lynn <roryo@roryo.dynup.net>
@@ -616,7 +619,17 @@ HOME_URL="https://www.linuxfromscratch.org/lfs/"
 RELEASE_TYPE="stable"
 EOF
 
-    
+    cat > $LFS/tmp/script.sh << "EOF"
+ systemd-machine-id-setup && systemctl preset-all
+ pwconv && grpconv mkdir -p /etc/default && useradd -D --gid 999 && passwd root
+ pkg=$(ls)
+ for i in $pkg; do
+    pkgadd $i
+    pkgadd -f $i
+    pkgadd -u -f $i
+ EOF
+    chmod u+x $LFS/tmp/script.sh
+    chroot /mnt/lfs /bin/bash -c "/tmp/script.sh"
     echo "The installation succeded, please run grub to add your new system to the boot entries."
     echo "You must also modify your /etc/fstab"
     echo "Please consider recompiling the kernel according to your needs as it might not boot"
