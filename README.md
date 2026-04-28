@@ -12,11 +12,27 @@ For that purpose, the correct usage would be
 ./azura bootstrap
 '''
 This needs to be run as root and be set as an executable. 
-The install will ask you the partition you want to install Onyx on.
-Some post-installation is still needed unfortunately, you must enter the chroot for the coming instructions.
-Please refer to the shadow post-installation and do not forget to set up your root password afterwards.
-Also these commands need to be ran for systemd : systemd-machine-id-setup && systemctl preset-all.
-Finally do not forget to compile your kernel following your own needs and correct the fstab.
+The installer will ask you the partition you want to install Onyx on.
+There is almost no post-configuration needed, just change your fstab, run a grub-mkconfig ensuring that os-prober is working, create a user and reboot.
+
+The configuration of the vm needs to be modified on some configurations, please replace the video section by this : 
+''' bash
+<video>
+    <model type="virtio" heads="1" primary="yes">
+    <acceleration accel3d="no"/>
+    </model>
+    <address type="pci" domain="0x0000" bus="0x00" slot="0x02" function="0x0"/>
+</video>
+'''
+
+And the graphics section by this :
+''' bash
+<graphics type="spice">
+    <listen type="none"/>
+    <image compression="off"/>
+    <gl enable="no"/>
+</graphics>
+'''
 
 Do not hesitate to refer to this repo to get the packages you need, they were built using cards 3.2.3 : 
 https://github.com/Delta-Azura/onyx.
