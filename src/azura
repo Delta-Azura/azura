@@ -636,6 +636,7 @@ EOF
 
 	chmod u+x $LFS/tmp/script.sh
     chroot /mnt /bin/bash -c "/tmp/script.sh"
+    chroot /mnt /bin/bash -c "glib-compile-schemas /usr/share/glib-2.0/schemas/"
     echo "The installation succeded, please run grub to add your new system to the boot entries."
     echo "You must also modify your /etc/fstab"
     echo "Please consider recompiling the kernel according to your needs as it might not boot"
