@@ -5,7 +5,7 @@ A wrapper for pkgutils and a installer for Onyx.
 The update function still needs to be tested, same for dependencies handling since they aren't specified in the Pkgfiles for now. 
 However you can still use the build and install functions but you will need to manage the dependencies by yourself.
 
-# Installation
+# Installation on a virtual machine.
 Azura is also a tool that allow you to install azura.
 For that purpose, the correct usage would be:
 ``` bash
@@ -36,7 +36,13 @@ And the graphics section by this :
 
 A NuTyX is needed as the host system to install Onyx.
 
+# Installation on real hardware.
+Onyx do not provide a linux-firmware package, you will need to get those by your own.
+Also, you must need to compile your own kernel suiting your own needs otherwise the system may not be usable.
+
+# Information
 Do not hesitate to refer to this repo to get the packages you need, they were built using cards 3.2.3 : 
 https://github.com/Delta-Azura/onyx.
+I'm planning to integrate azura fully and release a stable binary tarball to the get updates every week.
 
 Thank you to the GREAT-OS team for storing my core tarball ! 
