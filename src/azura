@@ -427,7 +427,8 @@ export MAKEFLAGS=-j$(nproc)
 EOF
     #wget https://cloud.g-os.org/public.php/dav/files/TBoBjMDXFpwcQ3R/core-backup.backup
     #wget https://cloud.g-os.org/public.php/dav/files/TBoBjMDXFpwcQ3R/core-backup.tar.gz
-    wget https://cloud.g-os.org/public.php/dav/files/TBoBjMDXFpwcQ3R/core-backup.tar.gz
+    #wget https://cloud.g-os.org/public.php/dav/files/TBoBjMDXFpwcQ3R/core-backup.tar.gz
+    wget https://cloud.g-os.org/public.php/dav/files/TBoBjMDXFpwcQ3R/archive.tar.gz
     mkdir -pv $LFS/{dev,proc,sys,run}
     mount -v --bind /dev $LFS/dev
     mount -vt devpts devpts -o gid=5,mode=0620 $LFS/dev/pts
