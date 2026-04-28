@@ -628,7 +628,8 @@ EOF
     pkgadd $i
     pkgadd -f $i
     pkgadd -u -f $i
- EOF
+done
+EOF
     chmod u+x $LFS/tmp/script.sh
     chroot /mnt/lfs /bin/bash -c "/tmp/script.sh"
     echo "The installation succeded, please run grub to add your new system to the boot entries."
